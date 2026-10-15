@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Profil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (auth.user(); as u) {
+    <section class="profile">
+      <img [src]="u.photo" [alt]="'Photo de ' + u.prenom" />
+      <h2>{{ u.prenom }} {{ u.nom }}</h2>
+      <p class="email">{{ u.email }}</p>
+
+      <dl>
+        <div>
+          <dt>Âge</dt>
+          <dd>{{ u.age }} ans</dd>
+        </div>
+        <div>
+          <dt>Films favoris</dt>
+          <dd>{{ u.favorites.length }}</dd>
+        </div>
+        <div>
+          <dt>Compte</dt>
+          <dd>{{ u.role === 'admin' ? 'Administrateur' : 'Utilisateur' }}</dd>
+        </div>
+      </dl>
+
+      <ion-button expand="block" fill="outline" color="danger" (click)="confirmLogout()">
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
+        Se déconnecter
+      </ion-button>
+    </section>
+  }
+</ion-content>

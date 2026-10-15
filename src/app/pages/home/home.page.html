@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Films</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Rechercher un film"
+      [debounce]="500"
+      (ionInput)="onSearch($event)"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (loading()) {
+    <div class="state"><ion-spinner name="crescent"></ion-spinner></div>
+  } @else if (list().length === 0) {
+    <div class="state">
+      <ion-icon name="search-outline"></ion-icon>
+      <h2>Aucun film trouvé</h2>
+      <p>Essaie un autre titre ou vide la recherche.</p>
+    </div>
+  } @else {
+    <div class="list">
+      @for (m of list(); track m.id) {
+        <app-movie-card
+          [movie]="m"
+          [favorite]="favorites().has(m.id)"
+          (toggleFavorite)="toggle($event)"
+        ></app-movie-card>
+      }
+    </div>
+
+    <ion-infinite-scroll [disabled]="!hasMore()" (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  }
+</ion-content>

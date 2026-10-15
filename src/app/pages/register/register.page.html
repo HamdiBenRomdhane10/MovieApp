@@ -1,0 +1,53 @@
+<ion-content [fullscreen]="true">
+  <main class="screen">
+    <header>
+      <h1>Créer un compte</h1>
+      <p>Une photo, quelques infos, et tu peux commencer ta liste de films.</p>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="photo">
+        <button type="button" class="avatar" (click)="takePhoto()" aria-label="Prendre une photo">
+          @if (photo()) {
+            <img [src]="photo()" alt="Ta photo de profil" />
+          } @else {
+            <ion-icon name="person" aria-hidden="true"></ion-icon>
+          }
+        </button>
+        <ion-button type="button" fill="outline" size="small" (click)="takePhoto()">
+          <ion-icon slot="start" name="camera"></ion-icon>
+          {{ photo() ? 'Reprendre la photo' : 'Prendre une photo' }}
+        </ion-button>
+      </div>
+
+      <div class="row">
+        <ion-input formControlName="prenom" label="Prénom" labelPlacement="floating" fill="outline"
+                   autocomplete="given-name" errorText="Obligatoire"></ion-input>
+        <ion-input formControlName="nom" label="Nom" labelPlacement="floating" fill="outline"
+                   autocomplete="family-name" errorText="Obligatoire"></ion-input>
+      </div>
+
+      <ion-input formControlName="age" type="number" inputmode="numeric" label="Âge" labelPlacement="floating"
+                 fill="outline" errorText="Entre un âge entre 10 et 120"></ion-input>
+
+      <ion-input formControlName="email" type="email" label="Email" labelPlacement="floating" fill="outline"
+                 autocomplete="email" errorText="Entre une adresse email valide"></ion-input>
+
+      <ion-input formControlName="password" type="password" label="Mot de passe" labelPlacement="floating"
+                 fill="outline" autocomplete="new-password" errorText="6 caractères minimum"></ion-input>
+
+      <ion-button type="submit" expand="block" [disabled]="loading()">
+        @if (loading()) {
+          <ion-spinner name="crescent"></ion-spinner>
+        } @else {
+          Créer mon compte
+        }
+      </ion-button>
+    </form>
+
+    <p class="switch">
+      Tu as déjà un compte ?
+      <a routerLink="/login">Se connecter</a>
+    </p>
+  </main>
+</ion-content>

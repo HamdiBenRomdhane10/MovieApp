@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mes affinités</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  @if (loading()) {
+    <div class="state"><ion-spinner name="crescent"></ion-spinner></div>
+  } @else if ((auth.user()?.favorites?.length ?? 0) === 0) {
+    <div class="state">
+      <ion-icon name="heart-outline"></ion-icon>
+      <h2>Ajoute des favoris d'abord</h2>
+      <p>Le matching compare ta liste à celle des autres. Il te faut au moins un film préféré.</p>
+      <ion-button routerLink="/tabs/home" size="small">Choisir des films</ion-button>
+    </div>
+  } @else if (matches().length === 0) {
+    <div class="state">
+      <ion-icon name="people-outline"></ion-icon>
+      <h2>Personne à plus de {{ threshold }} % pour l'instant</h2>
+      <p>
+        {{ compared() }} autre(s) utilisateur(s) comparé(s). Ajoute des films ou reviens quand d'autres
+        auront rempli leur liste.
+      </p>
+    </div>
+  } @else {
+    <p class="summary">
+      {{ matches().length }} profil(s) à {{ threshold }} % de correspondance ou plus, sur
+      {{ compared() }} comparé(s).
+    </p>
+
+    <ul class="matches">
+      @for (m of matches(); track m.user.uid) {
+        <li>
+          <div class="top">
+            <img [src]="m.user.photo" [alt]="'Photo de ' + m.user.prenom" />
+            <div class="who">
+              <strong>{{ m.user.prenom }} {{ m.user.nom }}</strong>
+              <span>{{ m.user.age }} ans · {{ m.common.length }} film(s) en commun</span>
+            </div>
+            <span class="score">{{ percent(m.score) }}&nbsp;%</span>
+          </div>
+
+          <ion-progress-bar [value]="m.score"></ion-progress-bar>
+
+          @if (commonTitles(m).length) {
+            <p class="common">{{ commonTitles(m).join(', ') }}</p>
+          }
+        </li>
+      }
+    </ul>
+  }
+</ion-content>

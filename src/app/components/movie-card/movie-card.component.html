@@ -1,0 +1,36 @@
+<article class="card">
+  <div class="poster">
+    @if (movie().poster) {
+      <img [src]="movie().poster" [alt]="'Affiche de ' + movie().title" loading="lazy" />
+    } @else {
+      <ion-icon name="film" aria-hidden="true"></ion-icon>
+    }
+  </div>
+
+  <div class="body">
+    <h3>{{ movie().title }}</h3>
+    <p class="meta">
+      @if (movie().year) {
+        <span>{{ movie().year }}</span>
+      }
+      @if (movie().rating; as r) {
+        <span class="rating"><ion-icon name="star"></ion-icon>{{ r.toFixed(1) }}</span>
+      }
+      @if (movie().custom) {
+        <span class="tag">Ajouté par l'admin</span>
+      }
+    </p>
+    <p class="overview">{{ movie().overview || 'Pas de résumé disponible.' }}</p>
+  </div>
+
+  @if (showFavorite()) {
+    <ion-button
+      class="fav"
+      fill="clear"
+      (click)="toggleFavorite.emit(movie())"
+      [attr.aria-label]="favorite() ? 'Retirer des favoris' : 'Ajouter aux favoris'"
+    >
+      <ion-icon slot="icon-only" [name]="favorite() ? 'heart' : 'heart-outline'" color="danger"></ion-icon>
+    </ion-button>
+  }
+</article>

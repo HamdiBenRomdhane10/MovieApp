@@ -1,0 +1,75 @@
+/* ==========================================================================
+   Thème global de MovieApp
+   Les feuilles de style d'Ionic (core.css, typography.css, ...) sont chargées
+   depuis angular.json. Ici on ne fait que personnaliser les couleurs.
+   Palette : indigo profond (couleur principale) + papier bleuté (fond).
+   ========================================================================== */
+
+:root {
+  --ion-font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Roboto, sans-serif;
+
+  --ion-background-color: #f1f3f9;
+  --ion-text-color: #1c1d33;
+
+  --ion-color-primary: #2f2b8f;
+  --ion-color-primary-rgb: 47, 43, 143;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #292679;
+  --ion-color-primary-tint: #443fa0;
+
+  --ion-color-warning: #f2a516;
+  --ion-color-warning-rgb: 242, 165, 22;
+  --ion-color-warning-contrast: #1c1d33;
+  --ion-color-warning-contrast-rgb: 28, 29, 51;
+  --ion-color-warning-shade: #d59113;
+  --ion-color-warning-tint: #f4ae2d;
+}
+
+ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: #ffffff;
+}
+
+/* Boutons « Films / Utilisateurs » de l'espace admin : texte blanc sur la barre indigo */
+ion-toolbar ion-segment {
+  --background: transparent;
+}
+
+ion-toolbar ion-segment-button {
+  --color: rgba(255, 255, 255, 0.7);
+  --color-checked: #ffffff;
+  --color-hover: #ffffff;
+  --indicator-color: #ffffff;
+  --background-checked: transparent;
+}
+
+/* Écran d'état vide / chargement, réutilisé par plusieurs pages */
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 55vh;
+  padding: 24px 32px;
+  text-align: center;
+  color: var(--ion-color-medium-shade);
+
+  h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--ion-text-color);
+  }
+
+  p {
+    margin: 0;
+    max-width: 30ch;
+    line-height: 1.5;
+  }
+
+  ion-icon {
+    font-size: 56px;
+    color: var(--ion-color-primary-tint);
+  }
+}

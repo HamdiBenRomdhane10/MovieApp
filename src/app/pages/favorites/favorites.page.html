@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mes favoris ({{ auth.user()?.favorites?.length ?? 0 }})</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (loading()) {
+    <div class="state"><ion-spinner name="crescent"></ion-spinner></div>
+  } @else if (list().length === 0) {
+    <div class="state">
+      <ion-icon name="heart-outline"></ion-icon>
+      <h2>Ta playlist est vide</h2>
+      <p>Appuie sur le cœur d'un film pour l'ajouter ici.</p>
+      <ion-button routerLink="/tabs/home" size="small">Parcourir les films</ion-button>
+    </div>
+  } @else {
+    <div class="list">
+      @for (m of list(); track m.id) {
+        <app-movie-card [movie]="m" [favorite]="true" (toggleFavorite)="remove($event)"></app-movie-card>
+      }
+    </div>
+  }
+</ion-content>

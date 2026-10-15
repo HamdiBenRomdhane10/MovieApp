@@ -1,0 +1,12 @@
+ion-searchbar {
+  --background: #fff;
+  --border-radius: 12px;
+  padding-top: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 14px 20px;
+}

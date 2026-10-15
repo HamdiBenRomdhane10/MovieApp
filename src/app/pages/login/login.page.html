@@ -1,0 +1,44 @@
+<ion-content [fullscreen]="true">
+  <main class="screen">
+    <header class="brand">
+      <h1>MovieApp</h1>
+      <p>Garde tes films préférés et retrouve les gens qui ont les mêmes goûts que toi.</p>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <ion-input
+        formControlName="email"
+        type="email"
+        label="Email"
+        labelPlacement="floating"
+        fill="outline"
+        autocomplete="email"
+        errorText="Entre une adresse email valide"
+      ></ion-input>
+
+      <ion-input
+        formControlName="password"
+        type="password"
+        label="Mot de passe"
+        labelPlacement="floating"
+        fill="outline"
+        autocomplete="current-password"
+        errorText="6 caractères minimum"
+      >
+      </ion-input>
+
+      <ion-button type="submit" expand="block" [disabled]="loading()">
+        @if (loading()) {
+          <ion-spinner name="crescent"></ion-spinner>
+        } @else {
+          Se connecter
+        }
+      </ion-button>
+    </form>
+
+    <p class="switch">
+      Pas encore de compte ?
+      <a routerLink="/register">Créer un compte</a>
+    </p>
+  </main>
+</ion-content>

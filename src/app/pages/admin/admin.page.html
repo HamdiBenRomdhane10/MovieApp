@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Administration</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [value]="segment()" (ionChange)="onSegment($event)">
+      <ion-segment-button value="films"><ion-label>Films</ion-label></ion-segment-button>
+      <ion-segment-button value="users"><ion-label>Utilisateurs</ion-label></ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (loading()) {
+    <div class="state"><ion-spinner name="crescent"></ion-spinner></div>
+  } @else if (segment() === 'films') {
+    <section class="panel">
+      <h2>{{ editingId() ? 'Modifier le film' : 'Ajouter un film' }}</h2>
+      <p class="hint">Tous les champs sont obligatoires.</p>
+
+      <form [formGroup]="form" (ngSubmit)="saveMovie()" novalidate>
+        <ion-input formControlName="title" label="Titre" labelPlacement="floating" fill="outline"
+                   errorText="Le titre est obligatoire (2 caractères minimum)"></ion-input>
+        <ion-input formControlName="year" label="Année (ex : 2019)" labelPlacement="floating" fill="outline"
+                   inputmode="numeric" errorText="Année obligatoire (ex : 2019)"></ion-input>
+        <ion-input formControlName="poster" label="Lien de l'affiche (https://…)" labelPlacement="floating"
+                   fill="outline" type="url" errorText="Lien obligatoire, commençant par http:// ou https://"></ion-input>
+        <ion-textarea formControlName="overview" label="Résumé" labelPlacement="floating" fill="outline"
+                      [autoGrow]="true" rows="3"
+                      errorText="Le résumé est obligatoire (10 caractères minimum)"></ion-textarea>
+
+        <ion-button type="submit" expand="block" [disabled]="saving()">
+          @if (saving()) {
+            <ion-spinner name="crescent"></ion-spinner>
+          } @else {
+            {{ editingId() ? 'Enregistrer les modifications' : 'Ajouter le film' }}
+          }
+        </ion-button>
+        @if (editingId()) {
+          <ion-button type="button" expand="block" fill="outline" (click)="cancelEdit()">Annuler la modification</ion-button>
+        }
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Films ajoutés ({{ customMovies().length }})</h2>
+      @if (customMovies().length === 0) {
+        <p class="hint">Aucun film ajouté pour l'instant. Ceux que tu crées apparaissent en tête de la liste des utilisateurs.</p>
+      }
+      <div class="movies">
+        @for (m of customMovies(); track m.id) {
+          <div class="item" [class.editing]="editingId() === m.id">
+            <app-movie-card [movie]="m" [showFavorite]="false"></app-movie-card>
+            <div class="actions">
+              <ion-button size="small" fill="outline" (click)="startEdit(m)">
+                <ion-icon slot="start" name="create-outline"></ion-icon>
+                Modifier
+              </ion-button>
+              <ion-button size="small" fill="outline" color="danger" (click)="confirmDelete(m)">
+                <ion-icon slot="start" name="trash-outline"></ion-icon>
+                Supprimer
+              </ion-button>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  } @else {
+    <section class="panel">
+      <h2>Utilisateurs ({{ userList().length }})</h2>
+      <p class="hint">
+        Désactiver un compte l'empêche de se connecter, sans rien supprimer.
+        @if (inactiveCount() > 0) { {{ inactiveCount() }} compte(s) désactivé(s). }
+      </p>
+
+      @if (userList().length === 0) {
+        <div class="state"><p>Aucun utilisateur inscrit pour le moment.</p></div>
+      } @else {
+        <ion-list [inset]="true">
+          @for (u of userList(); track u.uid) {
+            <ion-item [class.off]="!u.active">
+              <img slot="start" class="avatar" [src]="u.photo" [alt]="'Photo de ' + u.prenom" />
+              <ion-label>
+                <h3>{{ u.prenom }} {{ u.nom }}</h3>
+                <p>{{ u.email }} · {{ u.favorites.length }} favori(s)</p>
+                @if (!u.active) { <p class="badge">Désactivé</p> }
+              </ion-label>
+              <ion-button slot="end" size="small" [color]="u.active ? 'danger' : 'success'"
+                          [disabled]="busyUid() === u.uid" (click)="setActive(u, !u.active)">
+                {{ u.active ? 'Désactiver' : 'Réactiver' }}
+              </ion-button>
+            </ion-item>
+          }
+        </ion-list>
+      }
+    </section>
+  }
+</ion-content>

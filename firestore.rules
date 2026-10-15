@@ -1,0 +1,54 @@
+rules_version = '2';
+
+// Règles de sécurité Firestore pour MovieApp.
+// À copier dans : Console Firebase → Firestore Database → onglet "Règles" → Publier.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Vrai si l'utilisateur connecté est administrateur
+    function isAdmin() {
+      return request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ---------- Utilisateurs ----------
+    match /users/{uid} {
+      // Il faut être connecté pour lire un profil (nécessaire pour le matching et la liste admin)
+      allow read: if request.auth != null;
+
+      // Inscription : on ne peut créer QUE son propre profil, comme simple utilisateur actif
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.role == 'user'
+        && request.resource.data.active == true;
+
+      allow update: if request.auth != null && (
+        // Un utilisateur ne peut modifier que ses favoris (pas son rôle, ni son statut actif)
+        (request.auth.uid == uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['favorites']))
+        // L'admin ne peut modifier que le champ "active" (activer / désactiver)
+        || (isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['active']))
+      );
+
+      // Personne ne peut supprimer un profil (le sujet demande de désactiver, pas de supprimer)
+      allow delete: if false;
+    }
+
+    // ---------- Films du catalogue (CRUD réservé à l'admin) ----------
+    match /movies/{movieId} {
+      // Les 4 champs doivent être présents, de type texte et non vides
+      function isValidMovie() {
+        let d = request.resource.data;
+        return d.title is string && d.title.size() > 0
+          && d.year is string && d.year.size() > 0
+          && d.poster is string && d.poster.size() > 0
+          && d.overview is string && d.overview.size() > 0;
+      }
+
+      allow read: if request.auth != null;
+      allow create, update: if isAdmin() && isValidMovie();
+      allow delete: if isAdmin();
+    }
+  }
+}

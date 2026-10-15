@@ -1,0 +1,44 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  min-height: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.brand {
+  h1 {
+    margin: 0 0 8px;
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ion-color-primary);
+  }
+
+  p {
+    margin: 0;
+    max-width: 34ch;
+    line-height: 1.5;
+    color: #4a4c6a;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.switch {
+  margin: 0;
+  text-align: center;
+  color: #4a4c6a;
+
+  a {
+    font-weight: 700;
+    color: var(--ion-color-primary);
+  }
+}

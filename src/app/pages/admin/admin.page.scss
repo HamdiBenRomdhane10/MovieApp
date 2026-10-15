@@ -1,0 +1,72 @@
+.panel {
+  padding: 16px 14px 8px;
+
+  h2 {
+    margin: 0 4px 12px;
+    font-size: 1.1rem;
+    color: var(--ion-color-primary);
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    background: #fff;
+    border-radius: 14px;
+  }
+}
+
+.hint {
+  margin: 0 4px 12px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: #4a4c6a;
+}
+
+.movies {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+ion-list {
+  margin: 0;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.off {
+  opacity: 0.75;
+
+  h3 {
+    text-decoration: line-through;
+  }
+}
+
+.badge {
+  color: var(--ion-color-danger) !important;
+  font-weight: 700;
+}
+
+/* Un film de la liste + ses boutons Modifier / Supprimer */
+.item {
+  border-radius: 14px;
+
+  &.editing {
+    outline: 2px solid var(--ion-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 6px 2px 2px;
+}
